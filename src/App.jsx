@@ -5,12 +5,22 @@ import initialGroceries from './data/groceries'
 
 function App() {
 
-  const [groceries, setgroceries] = useState(initialGroceries)
-
+  const [groceries, setGroceries] = useState(initialGroceries)
+  const [cartItems, setCartItems] = useState([])
   function addZeros(number) {
     const str = "" + number;
     const pad = "000";
     return pad.substring(0, pad.length - str.length) + str;
+  }
+
+  function listenToAddToCartBtn(item) {
+    item.count ++
+    setCartItems(getCartItems())
+  }
+
+  function listenToRemoveFromCartBtn(item) {
+    item.count --
+    setCartItems(getCartItems())
   }
 
   function getCartItems() {
@@ -34,9 +44,10 @@ function App() {
             {groceries.map(item => (
               <li className='store--item'>
                 <div className='store--item-icon'>
-                  <img src={`assets/icons/${addZeros(item.id)}-${item.name}.svg`} alt={item.name} />
+                  <img src={`assets/icons/${addZeros(item.id)}-${item.name}.svg`}
+                  alt={item.name} />
                 </div>
-                <button>Add to cart</button>
+                <button onClick={() => listenToAddToCartBtn(item)}>Add to cart</button>
               </li>
             ))
             }
@@ -48,7 +59,25 @@ function App() {
 
           <div className="cart--item-list-container">
             <ul className="item-list cart--item-list">
-              Take a look at cart-item.html
+              {getCartItems().map(item => (
+                <li>
+                  <img className='cart--item-icon'
+                  src={`assets/icons/${addZeros(item.id)}-${item.name}.svg`}
+                  alt={`item.name`} />
+                  <p>{item.name}</p>
+                  <button 
+                  className='quantity-btn.remove-btn.center'
+                  onClick={() => listenToRemoveFromCartBtn(item)}>
+                    -</button>
+
+                  <span className='quantity-text.center'>{item.count}</span>
+                  
+                  <button 
+                  className='quantity-btn.add-btn.center'
+                  onClick={() => listenToAddToCartBtn(item)}>
+                    +</button>
+                </li>
+              ))}
             </ul>
           </div>
 
